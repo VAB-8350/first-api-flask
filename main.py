@@ -32,7 +32,7 @@ def get_task(id):
     return jsonify(False)
 
 #add new task
-@app.route('/add_task', methods=['POST'])
+@app.route('/task', methods=['POST'])
 def add_task():
     new_task = (
         request.json['titulo'],
@@ -48,7 +48,7 @@ def add_task():
     return jsonify({'mensage': 'add with exit!!'})
 
 #edit task, search for id
-@app.route('/edit_task/<int:id>', methods=['PUT'])
+@app.route('/task/<int:id>', methods=['PUT'])
 def edit_task(id):
 
     sql = "SELECT id FROM task.tareas WHERE id = %s"% id
@@ -69,7 +69,7 @@ def edit_task(id):
     return jsonify(False)
 
 #dell task, search for id 
-@app.route('/dell_task/<int:id>', methods=['DELETE'])
+@app.route('/task/<int:id>', methods=['DELETE'])
 def dell_task(id):
 
     sql = "SELECT id FROM task.tareas WHERE id = %s"% id
