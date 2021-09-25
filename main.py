@@ -1,3 +1,4 @@
+from function import read_all
 from flask import Flask, jsonify, request
 import mysql.connector
 
@@ -17,10 +18,9 @@ cursor = mydb.cursor()
 @app.route('/')
 def get_tasks():
     cursor.execute("SELECT * FROM task.tareas")
-    data = []
-    for row in cursor:
-        data.append(row)
-    return jsonify(data)
+    print(cursor)
+    res = read_all(cursor)
+    return res
 
 #get for id
 @app.route('/task/<int:id>')
