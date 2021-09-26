@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: ""
   version: "1.0.0"
-  title: "Swagger Petstore"
+  title: "Swagger tasks"
 host: "localhost:4000"
 basePath: "/v1"
 tags:
@@ -17,7 +17,7 @@ paths:
       - "tareas"
       summary: "Add a new task"
       description: "add new task"
-      operationId: "addPet"
+      operationId: "addtask"
       consumes:
       - "application/json"
       - "application/xml"
@@ -26,10 +26,9 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Pet object that needs to be added to the store"
         required: true
         schema:
-          $ref: "#/definitions/Pet"
+          $ref: "#/definitions/task"
       responses:
         "405":
           description: "Invalid input"
@@ -38,85 +37,76 @@ paths:
       - "tareas"
       summary: "return json of task"
       description: "return json of task"
-      operationId: "findPetsByStatus"
+      operationId: "findtasksByStatus"
       produces:
       - "application/json"
-      parameters:
-      - name: "status"
-        in: "query"
-        description: "Status values that need to be considered for filter"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          enum:
-          - "available"
-          - "pending"
-          - "sold"
-          default: "available"
-        collectionFormat: "multi"
+      
       responses:
         "200":
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Pet"
+              $ref: "#/definitions/task"
         "400":
           description: "Invalid status value"
-  /task/{petId}:
+  /task/{id}:
     get:
       tags:
       - "tareas"
       summary: "return task for id"
       description: "return task for id"
-      operationId: "getPetById"
+      operationId: "gettaskById"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
-      - name: "petId"
+      - name: "id"
         in: "path"
-        description: "ID of pet to return"
+        description: "ingresar el id de la tarea que desea ver"
         required: true
         type: "integer"
-        format: "int64"
+      
       responses:
         "200":
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Pet"
+            type: "array"
+            items:
+              $ref: "#/definitions/task"
         "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
+          description: "Invalid status value"
     put:
       tags:
       - "tareas"
       summary: "edit one task"
-      description: "edit task"
-      operationId: "updatePetWithForm"
+      description: "permite editar tareas guardadas"
+      operationId: "updatetask"
       consumes:
       - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
       parameters:
-      - name: "petId"
+      - name: "titulo"
         in: "path"
-        description: "ID of pet that needs to be updated"
+        description: "titulo de la tarea"
+        required: true
+        type: "string"
+      - name: "descripcion"
+        in: "path"
+        description: "descripcion de la tarea"
+        required: true
+        type: "string"
+      - name: "nombre_usuario"
+        in: "path"
+        description: "creador de la tarea"
+        required: true
+        type: "string"
+      - name: "estado"
+        in: "path"
+        description: "numero de estado de la tarea"
         required: true
         type: "integer"
-        format: "int64"
-      - name: "name"
-        in: "formData"
-        description: "Updated name of the pet"
-        required: false
-        type: "string"
-      - name: "status"
-        in: "formData"
-        description: "Updated status of the pet"
-        required: false
-        type: "string"
+  
       responses:
         "405":
           description: "Invalid input"
@@ -124,52 +114,43 @@ paths:
       tags:
       - "tareas"
       summary: "delete task"
-      description: "delete task"
+      description: "permite eliminar tareas guardadas"
       operationId: "deletetask"
       produces:
       - "application/json"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "petId"
+      - name: "id"
         in: "path"
-        description: "Pet id to delete"
+        description: "task id to delete"
         required: true
         type: "integer"
-        format: "int64"
       responses:
+        "200":
+          description: "mensage: task deel!!"
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Pet not found"
+          description: "task not found"
 definitions:
-  Pet:
+  task:
     type: "object"
-    required:
-    - "name"
-    - "photoUrls"
     properties:
-      id:
+      title:
+        type: "string"
+        example: "correr"
+      description:
+        type: "string"
+        example: 'tengo que salir a correr'
+      nombre_usuario:
+        type: "string"
+        example: "maria"
+      estado:
         type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-        example: "doggie"
-      photoUrls:
-        type: "array"
-        xml:
-          name: "photoUrl"
-          wrapped: true
-        items:
-          type: "string"
-      status:
-        type: "string"
-        description: "pet status in the store"
+        description: "1 = tarea asignada, 2 = tarea en proceso, 3 = bloqueado, 4 = tarea terminada"
         enum:
-        - "available"
-        - "pending"
-        - "sold"
+        - 1
+        - 2
+        - 3
+        - 4
     xml:
-      name: "Pet"
+      name: "task"
