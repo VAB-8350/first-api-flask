@@ -1,20 +1,17 @@
-from function import read_all
-from flask.json import jsonify
-from main import get_task, get_tasks, add_task, edit_task, dell_task
+from mysql.connector import cursor
+from function import read_all, validate
+from flask import jsonify
 
 
 
-def get():
-    cursor = {[
-            1,
-            "caminar",
-            "correr",
-            null,
-            null,
-            "maria",
-            3
-        ],}
-    
-    res = read_all(cursor)
-    print(res)
-    assert res == res
+def test_get():    
+    cursor = {('pepe', 3, 'formosa'), ('maria', 5, 'cordoba')}
+    assert read_all(cursor) == [('pepe', 3, 'formosa'), ('maria', 5, 'cordoba')]
+
+def test_validate_true():
+    aux = '123'
+    assert validate(aux) == '123' 
+
+def test_validate_false():
+    aux = ''
+    assert validate(aux) == False 

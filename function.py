@@ -5,6 +5,12 @@ def read_all(cursor):
         data = []
         for row in cursor:
             data.append(row)
-        return jsonify(data)
+        return data
     else: 
-        return jsonify({'mensage': 'ERROR.'})
+        return {'mensage': 'ERROR.'}
+
+def validate(data):
+    if len(data) > 0:
+        return data
+    return False
+    

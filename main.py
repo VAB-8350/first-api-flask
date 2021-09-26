@@ -1,4 +1,4 @@
-from function import read_all
+from function import read_all, validate
 from flask import Flask, jsonify, request
 import mysql.connector
 
@@ -18,34 +18,34 @@ cursor = mydb.cursor()
 @app.route('/')
 def get_tasks():
     cursor.execute("SELECT * FROM task.tareas")
-    print(cursor)
     res = read_all(cursor)
-    return res
+    return jsonify(res)
 
 #get for id
 @app.route('/task/<int:id>')
 def get_task(id):
     cursor.execute("SELECT * FROM task.tareas WHERE id = %s"% id)
-    validate = cursor.fetchall()
-    if len(validate) > 0:
-        return jsonify(validate)
-    return jsonify(False)
+    aux = cursor.fetchall()
+    res = validate(aux)
+    return jsonify(res)
 
 #add new task
 @app.route('/task', methods=['POST'])
 def add_task():
-    new_task = (
-        request.json['titulo'],
-        request.json['descripcion'],
-        request.json['nombre_usuario'],
-        request.json['estado']
-    )
+    try:
+        new_task = (
+            request.json['titulo'],
+            request.json['descripcion'],
+            request.json['nombre_usuario'],
+            request.json['estado']
+        )
+        sql = "INSERT INTO task.tareas (titulo, descripcion, nombre_usuario, estado) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql, new_task)
+        mydb.commit()
 
-    sql = "INSERT INTO task.tareas (titulo, descripcion, nombre_usuario, estado) VALUES (%s, %s, %s, %s)"
-    cursor.execute(sql, new_task)
-    mydb.commit()
-
-    return jsonify({'mensage': 'add with exit!!'})
+        return jsonify({'mensage': 'add with exit!!'})
+    except:
+        return jsonify({'mensage': 'dont have all data'})
 
 #edit task, search for id
 @app.route('/task/<int:id>', methods=['PUT'])
