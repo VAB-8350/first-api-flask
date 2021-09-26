@@ -1,5 +1,3 @@
-from flask import jsonify
-
 def read_all(cursor):
     if cursor:
         data = []
