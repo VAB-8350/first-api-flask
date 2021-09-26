@@ -1,8 +1,4 @@
-from mysql.connector import cursor
 from function import read_all, validate
-from flask import jsonify
-
-
 
 def test_get():    
     cursor = {('pepe', 3, 'formosa'), ('maria', 5, 'cordoba')}
